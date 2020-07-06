@@ -1,0 +1,15 @@
+{
+  "name": "isintu-api",
+  "version": "1.0.0",
+  "description": "This is an API for a suite of IsiZulu translation applications.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "author": "Mfundo Ntini",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
