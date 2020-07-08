@@ -39,6 +39,38 @@ server.get("/api/v1/proverbs/:id", (request, response) => {
   });
 });
 
+
+server.patch("/api/v1/proverbs/:id", (request, response) => {
+  // Get id from url
+  let id = request.params.id * 1;
+  const body = request.body;
+
+  let index = data.findIndex(element => element.id === id);
+  console.log(id, index, data[index]);
+
+  if(index === -1) return response.status(404).json({
+    status: "Fail",
+    message: "Not found"
+  });
+
+  // JS noobity
+  let updatedProverb = Object.assign(data[index], body);
+
+  // Persist data
+  filesystem.writeFile(`${__dirname}/data/database.json`, JSON.stringify(data), err => {
+    if(err) return response.status(500).json({
+      status: "Fail",
+      message: "Updated proverb not saved"
+    });
+  });
+
+  response.status(200).json({
+    status: "success",
+    proverb: updatedProverb
+  });
+});
+
+
 server.post("/api/v1/proverbs", (request, response) => {
   // Get body from response
   let body = request.body;
