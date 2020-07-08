@@ -9,6 +9,8 @@ const data = JSON.parse(filesystem.readFileSync(`${__dirname}/data/database.json
 const server = express();
 const PORT = 3000;
 
+// Server config and middlewares
+server.use(express.json());
 
 // Route handlers
 server.get("/api/v1/proverbs", (request, response) => {
