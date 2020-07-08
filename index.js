@@ -9,12 +9,31 @@ const data = JSON.parse(filesystem.readFileSync(`${__dirname}/data/database.json
 const server = express();
 const PORT = 3000;
 
+
 // Route handlers
 server.get("/api/v1/proverbs", (request, response) => {
   response.status(200).json({
     status: "success",
     results: data.length,
     data
+  });
+});
+
+server.get("/api/v1/proverbs/:id", (request, response) => {
+  // Get id from url
+  let id = request.params.id * 1;
+
+  let proverb = data.find(element => element.id === id);
+  console.log(id, proverb);
+
+  if(!proverb) return response.status(404).json({
+    status: "Fail",
+    message: "Not found"
+  });
+
+  response.status(200).json({
+    status: "success",
+    proverb
   });
 });
 
