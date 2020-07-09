@@ -10,6 +10,13 @@ exports.listAllProverbs = (request, response) => {
   });
 };
 
+exports.validateId = (request, response, next, value) => {
+    if(!Number.isInteger(value * 1)) return response.status(401).json({
+        status: "Fail",
+        message: `id url param "${value}" must be a number.`
+    });
+    next();
+};
 
 // Route handlers
 exports.getProverb = (request, response) => {
@@ -47,7 +54,7 @@ exports.updateProverb = (request, response) => {
   let updatedProverb = Object.assign(data[index], body);
 
   // Persist data
-  filesystem.writeFile(`${__dirname}/data/database.json`, JSON.stringify(data), err => {
+  filesystem.writeFile(`${__dirname}/../data/database.json`, JSON.stringify(data), err => {
     if(err) return response.status(500).json({
       status: "Fail",
       message: "Updated proverb not saved"
@@ -74,7 +81,7 @@ exports.createProverb = (request, response) => {
   data.push(newProverb);
 
   // Persist data
-  filesystem.writeFile(`${__dirname}/data/database.json`, JSON.stringify(data), err => {
+  filesystem.writeFile(`${__dirname}/../data/database.json`, JSON.stringify(data), err => {
     if(err) return response.status(500).json({
       status: "Fail",
       message: "New proverb not saved"
@@ -103,7 +110,7 @@ exports.deleteProverb = (request, response) => {
   data.splice(index, 1);
 
   // Persist data
-  filesystem.writeFile(`${__dirname}/data/database.json`, JSON.stringify(data), err => {
+  filesystem.writeFile(`${__dirname}/../data/database.json`, JSON.stringify(data), err => {
     if(err) return response.status(500).json({
       status: "Fail",
       message: "Proverb not deleted."
