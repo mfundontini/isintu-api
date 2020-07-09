@@ -6,6 +6,9 @@ const express = require("express");
 const morgan = require("morgan");
 const { request, response } = require("express");
 
+// Local imports
+const usersRouter = require("./routes/usersRoutes");
+
 // Vars and configs
 const data = JSON.parse(filesystem.readFileSync(`${__dirname}/data/database.json`));
 const server = express();
@@ -143,51 +146,12 @@ const deleteProverb = (request, response) => {
   });
 };
 
-const listAllUsers = (request, response) => {
-  response.status(501).json({
-    status: "Fail",
-    message: "Not implemented"
-  });
-};
-
-const getUser = (request, response) => {
-  response.status(501).json({
-    status: "Fail",
-    message: "Not implemented"
-  });
-};
-
-const updateUser = (request, response) => {
-  response.status(501).json({
-    status: "Fail",
-    message: "Not implemented"
-  });
-};
-
-const createUser = (request, response) => {
-  response.status(501).json({
-    status: "Fail",
-    message: "Not implemented"
-  });
-};
-
-const deleteUser = (request, response) => {
-  response.status(501).json({
-    status: "Fail",
-    message: "Not implemented"
-  });
-};
-
-
 // Routers
 const proverbsRouter = express.Router();
-const usersRouter = express.Router();
 
 // Routes
 proverbsRouter.route("/").get(listAllProverbs).post(createProverb);
 proverbsRouter.route("/:id").get(getProverb).patch(updateProverb).delete(deleteProverb);
-usersRouter.route("/").get(listAllUsers).post(createUser);
-usersRouter.route("/:id").get(getUser).patch(updateUser).delete(deleteUser);
 
 server.use('/api/v1/proverbs', proverbsRouter);
 server.use('/api/v1/users', usersRouter);
