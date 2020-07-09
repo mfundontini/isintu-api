@@ -21,11 +21,7 @@ const listAllProverbs = (request, response) => {
   });
 };
 
-
-
-server.get("/api/v1/proverbs", listAllProverbs);
-
-server.get("/api/v1/proverbs/:id", (request, response) => {
+const getProverb = (request, response) => {
   // Get id from url
   let id = request.params.id * 1;
 
@@ -41,7 +37,12 @@ server.get("/api/v1/proverbs/:id", (request, response) => {
     status: "success",
     proverb
   });
-});
+};
+
+
+server.get("/api/v1/proverbs", listAllProverbs);
+
+server.get("/api/v1/proverbs/:id", getProverb);
 
 
 server.patch("/api/v1/proverbs/:id", (request, response) => {
