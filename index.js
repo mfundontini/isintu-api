@@ -69,15 +69,7 @@ const updateProverb = (request, response) => {
   });
 };
 
-server.get("/api/v1/proverbs", listAllProverbs);
-
-server.get("/api/v1/proverbs/:id", getProverb);
-
-
-server.patch("/api/v1/proverbs/:id", updateProverb);
-
-
-server.post("/api/v1/proverbs", (request, response) => {
+const createProverb = (request, response) => {
   // Get body from response
   let body = request.body;
 
@@ -103,7 +95,16 @@ server.post("/api/v1/proverbs", (request, response) => {
     status: "Created",
     proverb: newProverb
   });
-});
+};
+
+
+server.get("/api/v1/proverbs", listAllProverbs);
+
+server.get("/api/v1/proverbs/:id", getProverb);
+
+server.patch("/api/v1/proverbs/:id", updateProverb);
+
+server.post("/api/v1/proverbs", createProverb);
 
 server.delete("/api/v1/proverbs/:id", (request, response) => {
   // Get id from url
