@@ -13,15 +13,17 @@ const PORT = 3000;
 server.use(express.json());
 
 // Route handlers
-server.get("/api/v1/proverbs", (request, response) => {
+const listAllProverbs = (request, response) => {
   response.status(200).json({
     status: "success",
     results: data.length,
     data
   });
-});
+};
 
-server.get("/api/v1/proverbs/:id", (request, response) => {
+
+// Route handlers
+const getProverb = (request, response) => {
   // Get id from url
   let id = request.params.id * 1;
 
@@ -37,10 +39,9 @@ server.get("/api/v1/proverbs/:id", (request, response) => {
     status: "success",
     proverb
   });
-});
+};
 
-
-server.patch("/api/v1/proverbs/:id", (request, response) => {
+const updateProverb = (request, response) => {
   // Get id from url
   let id = request.params.id * 1;
   const body = request.body;
@@ -68,10 +69,9 @@ server.patch("/api/v1/proverbs/:id", (request, response) => {
     status: "success",
     proverb: updatedProverb
   });
-});
+};
 
-
-server.post("/api/v1/proverbs", (request, response) => {
+const createProverb = (request, response) => {
   // Get body from response
   let body = request.body;
 
@@ -97,9 +97,9 @@ server.post("/api/v1/proverbs", (request, response) => {
     status: "Created",
     proverb: newProverb
   });
-});
+};
 
-server.delete("/api/v1/proverbs/:id", (request, response) => {
+const deleteProverb = (request, response) => {
   // Get id from url
   let id = request.params.id * 1;
 
@@ -124,8 +124,13 @@ server.delete("/api/v1/proverbs/:id", (request, response) => {
   response.status(204).json({
     status: "success"
   });
-});
+};
 
+// Routes
+server.route("/api/v1/proverbs").get(listAllProverbs).post(createProverb);
+server.route("/api/v1/proverbs/:id").get(getProverb).patch(updateProverb).delete(deleteProverb);
+
+// Run server
 server.listen(PORT, (err) => {
 
   if(err) return console.log(`Could not start server at port: ${PORT}`);
