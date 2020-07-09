@@ -21,6 +21,8 @@ const listAllProverbs = (request, response) => {
   });
 };
 
+
+// Route handlers
 const getProverb = (request, response) => {
   // Get id from url
   let id = request.params.id * 1;
@@ -124,17 +126,11 @@ const deleteProverb = (request, response) => {
   });
 };
 
+// Routes
+server.route("/api/v1/proverbs").get(listAllProverbs).post(createProverb);
+server.route("/api/v1/proverbs/:id").get(getProverb).patch(updateProverb).delete(deleteProverb);
 
-server.get("/api/v1/proverbs", listAllProverbs);
-
-server.get("/api/v1/proverbs/:id", getProverb);
-
-server.patch("/api/v1/proverbs/:id", updateProverb);
-
-server.post("/api/v1/proverbs", createProverb);
-
-server.delete("/api/v1/proverbs/:id", deleteProverb);
-
+// Run server
 server.listen(PORT, (err) => {
 
   if(err) return console.log(`Could not start server at port: ${PORT}`);
