@@ -13,13 +13,17 @@ const PORT = 3000;
 server.use(express.json());
 
 // Route handlers
-server.get("/api/v1/proverbs", (request, response) => {
+const listAllProverbs = (request, response) => {
   response.status(200).json({
     status: "success",
     results: data.length,
     data
   });
-});
+};
+
+
+
+server.get("/api/v1/proverbs", listAllProverbs);
 
 server.get("/api/v1/proverbs/:id", (request, response) => {
   // Get id from url
