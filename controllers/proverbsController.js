@@ -1,36 +1,8 @@
-// Core imports
 const filesystem = require("fs");
 
-// Third party imports
-const express = require("express");
-const morgan = require("morgan");
-const { request, response } = require("express");
+const data = JSON.parse(filesystem.readFileSync(`${__dirname}/../data/database.json`));
 
-// Vars and configs
-const data = JSON.parse(filesystem.readFileSync(`${__dirname}/data/database.json`));
-const server = express();
-const PORT = 3000;
-
-// Server config and middlewares
-server.use(morgan('dev'));
-server.use(express.json());
-
-server.use((request, response, next) => {
-  if(request.method == "POST"){
-    if(Object.keys(request.body).length === 0) {
-      console.log("Empty post data");
-      return response.status(401).json({
-        status: "Fail",
-        message: "Empty body supplied."
-      });
-    }
-    else request.body.updated = new Date().toISOString();
-  }
-  next();
-});
-
-// Route handlers
-const listAllProverbs = (request, response) => {
+exports.listAllProverbs = (request, response) => {
   response.status(200).json({
     status: "success",
     results: data.length,
@@ -40,7 +12,7 @@ const listAllProverbs = (request, response) => {
 
 
 // Route handlers
-const getProverb = (request, response) => {
+exports.getProverb = (request, response) => {
   // Get id from url
   let id = request.params.id * 1;
 
@@ -58,7 +30,7 @@ const getProverb = (request, response) => {
   });
 };
 
-const updateProverb = (request, response) => {
+exports.updateProverb = (request, response) => {
   // Get id from url
   let id = request.params.id * 1;
   const body = request.body;
@@ -88,7 +60,7 @@ const updateProverb = (request, response) => {
   });
 };
 
-const createProverb = (request, response) => {
+exports.createProverb = (request, response) => {
   // Get body from response
   let body = request.body;
 
@@ -116,7 +88,7 @@ const createProverb = (request, response) => {
   });
 };
 
-const deleteProverb = (request, response) => {
+exports.deleteProverb = (request, response) => {
   // Get id from url
   let id = request.params.id * 1;
 
@@ -142,60 +114,3 @@ const deleteProverb = (request, response) => {
     status: "success"
   });
 };
-
-const listAllUsers = (request, response) => {
-  response.status(501).json({
-    status: "Fail",
-    message: "Not implemented"
-  });
-};
-
-const getUser = (request, response) => {
-  response.status(501).json({
-    status: "Fail",
-    message: "Not implemented"
-  });
-};
-
-const updateUser = (request, response) => {
-  response.status(501).json({
-    status: "Fail",
-    message: "Not implemented"
-  });
-};
-
-const createUser = (request, response) => {
-  response.status(501).json({
-    status: "Fail",
-    message: "Not implemented"
-  });
-};
-
-const deleteUser = (request, response) => {
-  response.status(501).json({
-    status: "Fail",
-    message: "Not implemented"
-  });
-};
-
-
-// Routers
-const proverbsRouter = express.Router();
-const usersRouter = express.Router();
-
-// Routes
-proverbsRouter.route("/").get(listAllProverbs).post(createProverb);
-proverbsRouter.route("/:id").get(getProverb).patch(updateProverb).delete(deleteProverb);
-usersRouter.route("/").get(listAllUsers).post(createUser);
-usersRouter.route("/:id").get(getUser).patch(updateUser).delete(deleteUser);
-
-server.use('/api/v1/proverbs', proverbsRouter);
-server.use('/api/v1/users', usersRouter);
-
-
-// Run server
-server.listen(PORT, (err) => {
-
-  if(err) return console.log(`Could not start server at port: ${PORT}`);
-  console.log(`Running server at port: ${PORT}`);
-});
