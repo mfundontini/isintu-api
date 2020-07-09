@@ -3,6 +3,7 @@ const filesystem = require("fs");
 
 // Third party imports
 const express = require("express");
+const morgan = require("morgan");
 
 // Vars and configs
 const data = JSON.parse(filesystem.readFileSync(`${__dirname}/data/database.json`));
@@ -10,6 +11,7 @@ const server = express();
 const PORT = 3000;
 
 // Server config and middlewares
+server.use(morgan('dev'));
 server.use(express.json());
 
 server.use((request, response, next) => {
