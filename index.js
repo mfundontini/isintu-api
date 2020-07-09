@@ -4,6 +4,7 @@ const filesystem = require("fs");
 // Third party imports
 const express = require("express");
 const morgan = require("morgan");
+const { request, response } = require("express");
 
 // Vars and configs
 const data = JSON.parse(filesystem.readFileSync(`${__dirname}/data/database.json`));
@@ -142,9 +143,46 @@ const deleteProverb = (request, response) => {
   });
 };
 
+const listAllUsers = (request, response) => {
+  response.status(501).json({
+    status: "Fail",
+    message: "Not implemented"
+  });
+};
+
+const getUser = (request, response) => {
+  response.status(501).json({
+    status: "Fail",
+    message: "Not implemented"
+  });
+};
+
+const updateUser = (request, response) => {
+  response.status(501).json({
+    status: "Fail",
+    message: "Not implemented"
+  });
+};
+
+const createUser = (request, response) => {
+  response.status(501).json({
+    status: "Fail",
+    message: "Not implemented"
+  });
+};
+
+const deleteUser = (request, response) => {
+  response.status(501).json({
+    status: "Fail",
+    message: "Not implemented"
+  });
+};
+
 // Routes
 server.route("/api/v1/proverbs").get(listAllProverbs).post(createProverb);
 server.route("/api/v1/proverbs/:id").get(getProverb).patch(updateProverb).delete(deleteProverb);
+server.route("/api/v1/users").get(listAllUsers).post(createUser);
+server.route("/api/v1/users/:id").get(getUser).patch(updateUser).delete(deleteUser);
 
 // Run server
 server.listen(PORT, (err) => {
