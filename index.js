@@ -12,6 +12,20 @@ const PORT = 3000;
 // Server config and middlewares
 server.use(express.json());
 
+server.use((request, response, next) => {
+  if(request.method == "POST"){
+    if(Object.keys(request.body).length === 0) {
+      console.log("Empty post data");
+      return response.status(401).json({
+        status: "Fail",
+        message: "Empty body supplied."
+      });
+    }
+    else request.body.updated = new Date().toISOString();
+  }
+  next();
+});
+
 // Route handlers
 const listAllProverbs = (request, response) => {
   response.status(200).json({
