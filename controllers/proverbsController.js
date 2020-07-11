@@ -1,5 +1,7 @@
 const filesystem = require("fs");
 
+const Proverb = require("./../schemas/proverbs");
+
 const data = JSON.parse(filesystem.readFileSync(`${__dirname}/../data/database.json`));
 
 exports.listAllProverbs = (request, response) => {
@@ -80,25 +82,22 @@ exports.createProverb = (request, response) => {
 
   console.log(body);
 
-  // Massage the data
-  let newId = data[data.length - 1].id + 1;
-
   // Create new object, do not mutate incomiming one
-  const newProverb = Object.assign({id: newId}, body);
-  data.push(newProverb);
+  const newProverb = Object.assign({created: body.updated}, body);
 
   // Persist data
-  filesystem.writeFile(`${__dirname}/../data/database.json`, JSON.stringify(data), err => {
-    if(err) return response.status(500).json({
-      status: "Fail",
-      message: "New proverb not saved"
+  const proverb = new Proverb(newProverb);
+  proverb.save().then(result => {
+    console.log("Successfully persisted data.");
+    response.status(201).json({
+      status: "Created",
+      proverb: result
     });
-  });
-
-  // If all went well return a 201
-  response.status(201).json({
-    status: "Created",
-    proverb: newProverb
+  }).catch(err => {
+    return response.status(401).json({
+      status: "Fail",
+      error: err
+    });
   });
 };
 
