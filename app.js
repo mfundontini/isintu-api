@@ -24,7 +24,7 @@ server.use(express.json());
 server.use((request, response, next) => {
 
   // Make sure all POST requests have data
-  if(request.method == "POST"){
+  if(request.method == "POST" || request.method == "PATCH"){
     if(Object.keys(request.body).length === 0) {
       console.log("Empty post data");
       return response.status(401).json({
@@ -32,7 +32,7 @@ server.use((request, response, next) => {
         message: "Empty body supplied."
       });
     }
-    // Give the incoming POST requests an updated at date.
+    // Give the incoming request an updated at date.
     else request.body.updated = new Date().toISOString();
   }
   next();

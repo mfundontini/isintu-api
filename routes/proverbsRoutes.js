@@ -11,6 +11,6 @@ proverbsRouter.param("id", validateId);
 
 // Routes
 proverbsRouter.route("/").get(listAllProverbs).post(createProverb);
-proverbsRouter.route("/:id").get(getProverb).patch(findProverbOrExit, updateProverb).delete(findProverbOrExit, deleteProverb);
+proverbsRouter.route("/:id").get(getProverb).patch(updateProverb).delete(deleteProverb);
 
 module.exports = proverbsRouter;

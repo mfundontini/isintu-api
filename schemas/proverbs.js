@@ -7,7 +7,8 @@ const proverbSchema = new mongoose.Schema({
     },
     title: {
         type: String,
-        required: [true, "Title is required."]
+        required: [true, "Title is required."],
+        unique: true
     },
     description: {
         type: String
@@ -31,14 +32,14 @@ const proverbSchema = new mongoose.Schema({
     },
     verified: {
         type: Boolean,
-        required: [true, "Verified attr not supplied"]
+        default: false
     },
     source: {
-        type: Object
+        type: Object,
+        required: [true, "Please specify the source information."]
     },
     author: {
-        type: Number,
-        required: [true, "Author id not supplied."]
+        type: Number
     }
 });
 
