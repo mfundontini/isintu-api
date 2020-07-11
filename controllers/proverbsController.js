@@ -99,7 +99,6 @@ exports.updateProverb = (request, response) => {
 exports.createProverb = async (request, response) => {
   // Get body from response
   let body = request.body;
-  console.log(body);
 
   // Create new object, do not mutate incomiming one
   const newProverb = Object.assign({created: body.updated}, body);
