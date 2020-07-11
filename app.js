@@ -1,7 +1,9 @@
 // Third party imports
+const dotenv = require("dotenv");
 const express = require("express");
 const morgan = require("morgan");
-const { request, response } = require("express");
+
+dotenv.config({ path: "./config.env"});
 
 // Local imports
 const usersRouter = require("./routes/usersRoutes");
