@@ -13,9 +13,9 @@ exports.listAllProverbs = (request, response) => {
 };
 
 exports.validateId = (request, response, next, value) => {
-    if(!Number.isInteger(value * 1)) return response.status(401).json({
+    if(value.length !== 24 ) return response.status(401).json({
         status: "Fail",
-        message: `id url param "${value}" must be a number.`
+        message: `id url param "${value}" is invalid.`
     });
     next();
 };
