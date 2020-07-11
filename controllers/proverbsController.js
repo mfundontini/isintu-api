@@ -121,19 +121,19 @@ exports.createProverb = async (request, response) => {
   }
 };
 
-exports.deleteProverb = (request, response) => {
+exports.deleteProverb = async (request, response) => {
   
-  data.splice(request.index, 1);
-
-  // Persist data
-  filesystem.writeFile(`${__dirname}/../data/database.json`, JSON.stringify(data), err => {
-    if(err) return response.status(500).json({
+  try {
+      const proverb = await Proverb.findByIdAndDelete(request.params.id);
+      return response.status(204).json({
+        status: "success",
+        proverb
+      });
+  }
+  catch(err) {
+    return response.status(404).json({
       status: "Fail",
-      message: "Proverb not deleted."
+      message: "Not found"
     });
-  });
-
-  response.status(204).json({
-    status: "success"
-  });
+  }
 };
