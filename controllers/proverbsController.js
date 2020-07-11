@@ -4,33 +4,7 @@ const Proverb = require("./../schemas/proverbs");
 
 const data = JSON.parse(filesystem.readFileSync(`${__dirname}/../data/database.json`));
 
-exports.listAllProverbs = async (request, response) => {
-
-  try {
-    const proverbs = await Proverb.find();
-    
-    // Use status codes to communicate actions than an umbrella error
-    if(proverbs) {
-       return response.status(200).json({
-        status: "Success",
-        results: data.length,
-        proverbs
-      });
-    }
-    return response.status(204).json({
-      status: "No content",
-      results: 0,
-      data: [] 
-    });
-  }
-  catch(err) {
-    return response.status(500).json({
-      status: "Fail",
-      error: err 
-    });
-  }
-};
-
+// Middlewares
 exports.validateId = (request, response, next, value) => {
     if(value.length !== 24 ) return response.status(401).json({
         status: "Fail",
@@ -58,22 +32,48 @@ exports.findProverbOrExit = (request, response, next) => {
 */
 
 // Route handlers
-exports.getProverb = (request, response) => {
-  // Get id from url
-  let id = request.params.id * 1;
+exports.listAllProverbs = async (request, response) => {
 
-  let proverb = data.find(element => element.id === id);
-  console.log(id, proverb);
+  try {
+    const proverbs = await Proverb.find();
+    
+    // Use status codes to communicate actions than an umbrella error
+    if(proverbs) {
+       return response.status(200).json({
+        status: "Success",
+        results: proverbs.length,
+        proverbs
+      });
+    }
+    return response.status(204).json({
+      status: "No content",
+      results: 0,
+      data: [] 
+    });
+  }
+  catch(err) {
+    return response.status(500).json({
+      status: "Fail",
+      error: err 
+    });
+  }
+};
 
-  if(!proverb) return response.status(404).json({
-    status: "Fail",
-    message: "Not found"
-  });
-
-  response.status(200).json({
-    status: "success",
-    proverb
-  });
+exports.getProverb = async (request, response) => {
+  
+  try {
+      const proverb = await Proverb.findById(request.params.id);
+      return response.status(200).json({
+        status: "success",
+        proverb
+      });
+  }
+  catch(err) {
+    return response.status(404).json({
+      status: "Fail",
+      message: "Not found"
+    });
+  }
 };
 
 exports.updateProverb = (request, response) => {
