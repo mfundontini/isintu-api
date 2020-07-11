@@ -76,29 +76,29 @@ exports.updateProverb = (request, response) => {
   });
 };
 
-exports.createProverb = (request, response) => {
+exports.createProverb = async (request, response) => {
   // Get body from response
   let body = request.body;
-
   console.log(body);
 
   // Create new object, do not mutate incomiming one
   const newProverb = Object.assign({created: body.updated}, body);
 
-  // Persist data
-  const proverb = new Proverb(newProverb);
-  proverb.save().then(result => {
+  try {
+    // Await instance creation and respond
+    const proverb = await Proverb.create(newProverb);
     console.log("Successfully persisted data.");
     response.status(201).json({
       status: "Created",
-      proverb: result
+      proverb: proverb
     });
-  }).catch(err => {
+  }
+  catch(err) {
     return response.status(401).json({
       status: "Fail",
       error: err
     });
-  });
+  }
 };
 
 exports.deleteProverb = (request, response) => {
