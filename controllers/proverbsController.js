@@ -76,24 +76,21 @@ exports.getProverb = async (request, response) => {
   }
 };
 
-exports.updateProverb = (request, response) => {
+exports.updateProverb = async (request, response) => {
 
-  const body = request.body;
-  // JS noobity
-  let updatedProverb = Object.assign(data[request.index], body);
-
-  // Persist data
-  filesystem.writeFile(`${__dirname}/../data/database.json`, JSON.stringify(data), err => {
-    if(err) return response.status(500).json({
+  try {
+      const proverb = await Proverb.findByIdAndUpdate(request.params.id, request.body, {new: true, runValidators: true});
+      return response.status(201).json({
+        status: "success",
+        proverb
+      });
+  }
+  catch(err) {
+    return response.status(404).json({
       status: "Fail",
-      message: "Updated proverb not saved"
+      message: "Not found"
     });
-  });
-
-  response.status(200).json({
-    status: "success",
-    proverb: updatedProverb
-  });
+  }
 };
 
 exports.createProverb = async (request, response) => {
