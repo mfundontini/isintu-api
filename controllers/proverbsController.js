@@ -4,12 +4,31 @@ const Proverb = require("./../schemas/proverbs");
 
 const data = JSON.parse(filesystem.readFileSync(`${__dirname}/../data/database.json`));
 
-exports.listAllProverbs = (request, response) => {
-  response.status(200).json({
-    status: "success",
-    results: data.length,
-    data
-  });
+exports.listAllProverbs = async (request, response) => {
+
+  try {
+    const proverbs = await Proverb.find();
+    
+    // Use status codes to communicate actions than an umbrella error
+    if(proverbs) {
+       return response.status(200).json({
+        status: "Success",
+        results: data.length,
+        proverbs
+      });
+    }
+    return response.status(204).json({
+      status: "No content",
+      results: 0,
+      data: [] 
+    });
+  }
+  catch(err) {
+    return response.status(500).json({
+      status: "Fail",
+      error: err 
+    });
+  }
 };
 
 exports.validateId = (request, response, next, value) => {
@@ -20,7 +39,7 @@ exports.validateId = (request, response, next, value) => {
     next();
 };
 
-
+/* WAS IMPORTANT WITH MOCFK DATA< BUT MONGOOSE API GIVES DIRECT FUNCTIONS FOR DELETION AND UPDATING
 exports.findProverbOrExit = (request, response, next) => {
     // Get id from url
     let id = request.params.id * 1;
@@ -36,6 +55,7 @@ exports.findProverbOrExit = (request, response, next) => {
     request.index = index;
     next();
 };
+*/
 
 // Route handlers
 exports.getProverb = (request, response) => {
