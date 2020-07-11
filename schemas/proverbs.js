@@ -39,8 +39,7 @@ const proverbSchema = new mongoose.Schema({
         required: [true, "Please specify the source information."]
     },
     author: {
-        type: Number,
-        required: [true, "Author id not supplied."]
+        type: Number
     }
 });
 
