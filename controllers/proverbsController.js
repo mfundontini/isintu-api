@@ -1,8 +1,4 @@
-const filesystem = require("fs");
-
 const Proverb = require("./../schemas/proverbs");
-
-const data = JSON.parse(filesystem.readFileSync(`${__dirname}/../data/database.json`));
 
 // Middlewares
 exports.validateId = (request, response, next, value) => {
@@ -38,7 +34,7 @@ exports.listAllProverbs = async (request, response) => {
     const proverbs = await Proverb.find();
     
     // Use status codes to communicate actions than an umbrella error
-    if(proverbs) {
+    if(proverbs.length > 0) {
        return response.status(200).json({
         status: "Success",
         results: proverbs.length,
