@@ -54,6 +54,16 @@ exports.listAllProverbs = async (request, response) => {
       query.sort(sortBy);
     }
 
+    // Projection
+    if(queryString.fields) {
+      const fields = queryString.fields.split(",").join(" ");
+      console.log(fields);
+      query.select(fields);
+    }
+    else {
+      query.select("-__v");
+    }
+
     // Resolve query
     const proverbs = await query;
     // Use status codes to communicate actions than an umbrella error
