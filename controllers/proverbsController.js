@@ -1,7 +1,7 @@
 const Proverb = require("./../schemas/proverbs");
 
 // Constants
-const FILTERING_EXCLUSIONS = ["limit", "offset", "sort", "order", "fields"];
+const FILTERING_EXCLUSIONS = ["limit", "offset", "sort", "order", "fields", "page"];
 
 // Middlewares
 exports.validateId = (request, response, next, value) => {
@@ -64,12 +64,27 @@ exports.listAllProverbs = async (request, response) => {
       query.select("-__v");
     }
 
+    // Pagination
+    const page = queryString.page * 1 || 1;
+    const limit = queryString.limit * 1 || 10;
+    const skip = (page - 1) * limit;
+
+    if(page > 1) {
+      const numberOfProverbs = await Proverb.countDocuments();
+      if (skip >= numberOfProverbs) throw new Error("Page out of range.");
+    }
+    
+    query.skip(skip).limit(limit);
+
     // Resolve query
     const proverbs = await query;
     // Use status codes to communicate actions than an umbrella error
     if(proverbs.length > 0) {
        return response.status(200).json({
+        
         status: "Success",
+        page: page,
+        limit: limit,
         results: proverbs.length,
         proverbs
       });
@@ -77,13 +92,15 @@ exports.listAllProverbs = async (request, response) => {
     return response.status(204).json({
       status: "No content",
       results: 0,
+      page: queryString.page,
+      limit: queryString.limit,
       data: [] 
     });
   }
   catch(err) {
     return response.status(500).json({
       status: "Fail",
-      error: err 
+      error: err.message 
     });
   }
 };
