@@ -170,6 +170,33 @@ exports.proverbStatistics = async (request, response) => {
   });
 };
 
+exports.proverbsByTags = async (request, response) => {
+
+  const tags = await Proverb.aggregate([
+    {
+      $unwind: "$tags"
+    },
+    {
+      $match: { translations: { $exists: true, $ne: [] } },
+    },
+    {
+      $group: {
+        _id: { $toUpper: "$tags" },
+        total: { $sum: 1 },
+        proverbs: { $push: { $concat: ["$title", " - ", "$description"]} }
+      }
+    },
+    {
+      $sort: { rating: 1}
+    }
+  ]);
+
+  return response.status(200).json({
+    status: "Success",
+    tags
+  });
+};
+
 
 
 exports.aliasTranslated = (request, response, next) => {
