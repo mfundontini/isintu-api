@@ -1,5 +1,7 @@
 const Proverb = require("./../schemas/proverbs");
 
+const MongoQuery = require("./../utils/query");
+
 // Middlewares
 exports.validateId = (request, response, next, value) => {
     if(value.length !== 24 ) return response.status(401).json({
@@ -31,12 +33,21 @@ exports.findProverbOrExit = (request, response, next) => {
 exports.listAllProverbs = async (request, response) => {
 
   try {
-    const proverbs = await Proverb.find();
-    
+    // Declare query with all results
+    let query = request.mongoQuery || new MongoQuery(Proverb.find(), request.query);
+
+    // Filter + Sort + Project + paginate query
+    query.filter().sort().project().paginate();
+
+    // Resolve query
+    const proverbs = await query.query;
     // Use status codes to communicate actions than an umbrella error
     if(proverbs.length > 0) {
        return response.status(200).json({
+        
         status: "Success",
+        page: query.page,
+        limit: query.limit,
         results: proverbs.length,
         proverbs
       });
@@ -44,13 +55,15 @@ exports.listAllProverbs = async (request, response) => {
     return response.status(204).json({
       status: "No content",
       results: 0,
+      page: query.page,
+      limit: query.limit,
       data: [] 
     });
   }
   catch(err) {
     return response.status(500).json({
       status: "Fail",
-      error: err 
+      error: err.message 
     });
   }
 };
@@ -128,4 +141,9 @@ exports.deleteProverb = async (request, response) => {
       message: "Not found"
     });
   }
+};
+
+exports.aliasTranslated = (request, response, next) => {
+  request.mongoQuery = new MongoQuery(Proverb.find({ translations: { $exists: true, $ne: [] } }), request.query);
+  next();
 };
