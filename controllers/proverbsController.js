@@ -1,7 +1,7 @@
 const Proverb = require("./../schemas/proverbs");
 
 // Constants
-const FILTERING_EXCLUSIONS = ["limit", "offset", "sort", "order"];
+const FILTERING_EXCLUSIONS = ["limit", "offset", "sort", "order", "fields"];
 
 // Middlewares
 exports.validateId = (request, response, next, value) => {
@@ -46,6 +46,12 @@ exports.listAllProverbs = async (request, response) => {
       FILTERING_EXCLUSIONS.forEach(el => delete filters[el]);
 
       query.find(filters);  
+    }
+
+    // Sorting
+    if(queryString.sort) {
+      const sortBy = queryString.sort.replace(",", " ");
+      query.sort(sortBy);
     }
 
     // Resolve query
