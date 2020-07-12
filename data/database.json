@@ -1,1 +1,116 @@
-[{"id":1,"type":"izaga","title":"Kuyoqhuma sanhlamvana ezinye ziyofeketha.","description":"Abanye bazophumelela, abanye kuzobabhedela.","translations":[{"language":"English","language_code":"EN","title":null,"decsription":"Others will succeed, others will not."}],"tags":["izaga","isibhamu","gun"],"image":null,"created":"2020-07-06T15:26:57.707Z","updated":null,"verified":true,"source":{"type":"author","value":"Mfundo Ntini"},"author":1},{"id":2,"type":"izisho","title":"Ukuba yinkomo enombala","description":"Ukwaziwa abantu bonke ukuthi ungumuntu onjani.","translations":[{"language":"English","language_code":"EN","title":null,"decsription":"Being known by others of your character."}],"tags":["izisho","inkomo","izilwane","animals","cow"],"image":null,"created":"2020-07-06T15:26:57.707Z","updated":null,"verified":true,"source":{"type":"link","value":"https://zuluring.blogspot.com/p/izisho.html","domain":"zuluring"},"author":null},{"id":3,"type":"izaga","title":"Imbila yeswela umsila ngokulayezela","description":"Ungaze wathemba abanye ukuthi bakwenzele imisebenzi eqondene lawe.","translations":[{"language":"English","language_code":"EN","title":"The rock badger missed out on a tail by asking others.","decsription":"Do not trust others to do your work for you."}],"tags":["izaga","izilwane","imbila"],"image":null,"created":"2020-07-06T15:26:57.707Z","updated":null,"verified":true,"source":{"type":"link","value":"https://zuluring.blogspot.com/p/izaga.html","domain":"zuluring"},"author":null},{"id":4,"type":"izisho","title":"Ukudla anhlamvana.","description":"Ukuphila.","translations":[{"language":"English","language_code":"EN","title":null,"decsription":"Being alive."}],"tags":["izisho"],"image":null,"created":"2020-07-06T15:26:57.707Z","updated":null,"verified":true,"source":{"type":"author","value":"Mfundo Ntini"},"author":1},{"id":5,"type":"izaga","title":"Izandla ziyagezana.","description":"Abantu bayasizana.","translations":[{"language":"English","language_code":"EN","title":"Hands wash each other.","decsription":"People help each other in order to succeed."}],"tags":["izaga","body parts","hands"],"image":null,"created":"2020-07-06T15:26:57.707Z","updated":null,"verified":true,"source":{"type":"author","value":"Mfundo Ntini"},"author":1},{"id":6,"type":"izisho","title":"Ukuqhuba imbuzi","description":"Ukudakwa ubemanzi.","translations":[{"language":"English","language_code":"EN","title":"Herding a goat.","decsription":"being kak drunk."}],"tags":["izisho","imbuzi","izilwane","animals","goat"],"image":null,"created":"2020-07-08T15:26:57.707Z","updated":null,"verified":true,"source":{"type":"author","value":"Mfundo ntini"},"author":1}]
+[{
+	"id": 1,
+	"type": "izaga",
+	"title": "Kuyoqhuma sanhlamvana ezinye ziyofeketha.",
+	"description": "Abanye bazophumelela, abanye kuzobabhedela.",
+	"translations": [{
+		"language": "English",
+		"language_code": "EN",
+		"title": null,
+		"decsription": "Others will succeed, others will not."
+	}],
+	"tags": ["izaga", "isibhamu", "gun"],
+	"image": null,
+	"verified": true,
+	"source": {
+		"type": "author",
+		"value": "Mfundo Ntini"
+	},
+	"author": 1
+}, {
+	"id": 2,
+	"type": "izisho",
+	"title": "Ukuba yinkomo enombala",
+	"description": "Ukwaziwa abantu bonke ukuthi ungumuntu onjani.",
+	"translations": [{
+		"language": "English",
+		"language_code": "EN",
+		"title": null,
+		"decsription": "Being known by others of your character."
+	}],
+	"tags": ["izisho", "inkomo", "izilwane", "animals", "cow"],
+	"image": null,
+	"verified": false,
+	"source": {
+		"type": "link",
+		"value": "https://zuluring.blogspot.com/p/izisho.html",
+		"domain": "zuluring"
+	},
+	"author": null
+}, {
+	"id": 3,
+	"type": "izaga",
+	"title": "Imbila yeswela umsila ngokulayezela",
+	"description": "Ungaze wathemba abanye ukuthi bakwenzele imisebenzi eqondene lawe.",
+	"translations": [{
+		"language": "English",
+		"language_code": "EN",
+		"title": "The rock badger missed out on a tail by asking others.",
+		"decsription": "Do not trust others to do your work for you."
+	}],
+	"tags": ["izaga", "izilwane", "imbila"],
+	"image": null,
+	"verified": true,
+	"source": {
+		"type": "link",
+		"value": "https://zuluring.blogspot.com/p/izaga.html",
+		"domain": "zuluring"
+	},
+	"author": null
+}, {
+	"id": 4,
+	"type": "izisho",
+	"title": "Ukudla anhlamvana.",
+	"description": "Ukuphila.",
+	"translations": [{
+		"language": "English",
+		"language_code": "EN",
+		"title": null,
+		"decsription": "Being alive."
+	}],
+	"tags": ["izisho"],
+	"image": null,
+	"source": {
+		"type": "author",
+		"value": "Mfundo Ntini"
+	},
+	"author": 1
+}, {
+	"id": 5,
+	"type": "izaga",
+	"title": "Izandla ziyagezana.",
+	"description": "Abantu bayasizana.",
+	"translations": [{
+		"language": "English",
+		"language_code": "EN",
+		"title": "Hands wash each other.",
+		"decsription": "People help each other in order to succeed."
+	}],
+	"tags": ["izaga", "body parts", "hands"],
+	"image": null,
+	"verified": true,
+	"source": {
+		"type": "author",
+		"value": "Mfundo Ntini"
+	},
+	"author": 1
+}, {
+	"id": 6,
+	"type": "izisho",
+	"title": "Ukuqhuba imbuzi",
+	"description": "Ukudakwa ubemanzi.",
+	"translations": [{
+		"language": "English",
+		"language_code": "EN",
+		"title": "Herding a goat.",
+		"decsription": "being kak drunk."
+	}],
+	"tags": ["izisho", "imbuzi", "izilwane", "animals", "goat"],
+	"image": null,
+	"verified": true,
+	"source": {
+		"type": "author",
+		"value": "Mfundo ntini"
+	},
+	"author": 1
+}]
