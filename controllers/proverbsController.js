@@ -1,7 +1,6 @@
 const Proverb = require("./../schemas/proverbs");
 
-// Constants
-const FILTERING_EXCLUSIONS = ["limit", "offset", "sort", "order", "fields", "page"];
+const MongoQuery = require("./../utils/query");
 
 // Middlewares
 exports.validateId = (request, response, next, value) => {
@@ -35,56 +34,20 @@ exports.listAllProverbs = async (request, response) => {
 
   try {
     // Declare query with all results
-    let query = request.mongoQuery || Proverb.find();
+    let query = request.mongoQuery || new MongoQuery(Proverb.find(), request.query);
 
-    // Filtering
-    const queryString = request.query;
-    if(Object.keys(queryString).length !== 0) {
-      console.log(queryString);
-      let filters = {...queryString};
-
-      FILTERING_EXCLUSIONS.forEach(el => delete filters[el]);
-
-      query.find(filters);  
-    }
-
-    // Sorting
-    if(queryString.sort) {
-      const sortBy = queryString.sort.replace(",", " ");
-      query.sort(sortBy);
-    }
-
-    // Projection
-    if(queryString.fields) {
-      const fields = queryString.fields.split(",").join(" ");
-      console.log(fields);
-      query.select(fields);
-    }
-    else {
-      query.select("-__v");
-    }
-
-    // Pagination
-    const page = queryString.page * 1 || 1;
-    const limit = queryString.limit * 1 || 10;
-    const skip = (page - 1) * limit;
-
-    if(page > 1) {
-      const numberOfProverbs = await Proverb.countDocuments();
-      if (skip >= numberOfProverbs) throw new Error("Page out of range.");
-    }
-    
-    query.skip(skip).limit(limit);
+    // Filter + Sort + Project + paginate query
+    query.filter().sort().project().paginate();
 
     // Resolve query
-    const proverbs = await query;
+    const proverbs = await query.query;
     // Use status codes to communicate actions than an umbrella error
     if(proverbs.length > 0) {
        return response.status(200).json({
         
         status: "Success",
-        page: page,
-        limit: limit,
+        page: query.page,
+        limit: query.limit,
         results: proverbs.length,
         proverbs
       });
@@ -92,8 +55,8 @@ exports.listAllProverbs = async (request, response) => {
     return response.status(204).json({
       status: "No content",
       results: 0,
-      page: queryString.page,
-      limit: queryString.limit,
+      page: query.page,
+      limit: query.limit,
       data: [] 
     });
   }
@@ -181,6 +144,6 @@ exports.deleteProverb = async (request, response) => {
 };
 
 exports.aliasTranslated = (request, response, next) => {
-  request.mongoQuery = Proverb.find({ translations: { $exists: true, $ne: [] } });
+  request.mongoQuery = new MongoQuery(Proverb.find({ translations: { $exists: true, $ne: [] } }), request.query);
   next();
 };
