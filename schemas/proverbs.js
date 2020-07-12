@@ -42,6 +42,10 @@ const proverbSchema = new mongoose.Schema({
     },
     author: {
         type: Number
+    },
+    rating: {
+        type: Number,
+        default: 2.5
     }
 });
 
