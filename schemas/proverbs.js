@@ -8,27 +8,29 @@ const proverbSchema = new mongoose.Schema({
     title: {
         type: String,
         required: [true, "Title is required."],
-        unique: true
+        unique: true,
+        trim: true
     },
     description: {
-        type: String
+        type: String,
+        trim: true
     },
     translations: {
-        type: Array
+        type: [Object]
     },
     tags: {
-        type: Array
+        type: [String]
     },
     image: {
         type: String
     },
     created: {
-        type: String,
-        required: [true, "Created at date string not supplied."]
+        type: Date,
+        default: Date.now()
     },
     updated: {
-        type: String,
-        required: [true, "Updated at date string not supplied."]
+        type: Date,
+        default: Date.now()
     },
     verified: {
         type: Boolean,
