@@ -33,7 +33,7 @@ server.use((request, response, next) => {
       });
     }
     // Give the incoming request an updated at date.
-    else request.body.updated = new Date().toISOString();
+    else request.body.updated = Date.now();
   }
   next();
 });
