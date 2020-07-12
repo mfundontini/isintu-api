@@ -1,7 +1,7 @@
 const express = require("express");
 
 const {listAllProverbs, createProverb, getProverb, proverbStatistics,
-    updateProverb, deleteProverb, validateId, aliasTranslated
+    updateProverb, deleteProverb, validateId, aliasTranslated, proverbsByTags
 } = require("./../controllers/proverbsController");
 
 const proverbsRouter = express.Router();
@@ -9,6 +9,7 @@ const proverbsRouter = express.Router();
 // Aliased routes
 proverbsRouter.route("/translated").get(aliasTranslated, listAllProverbs);
 proverbsRouter.route("/statistics").get(proverbStatistics);
+proverbsRouter.route("/tags").get(proverbsByTags);
 
 // Param middlewares
 proverbsRouter.param("id", validateId);
