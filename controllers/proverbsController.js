@@ -35,7 +35,7 @@ exports.listAllProverbs = async (request, response) => {
 
   try {
     // Declare query with all results
-    let query = Proverb.find();
+    let query = request.mongoQuery || Proverb.find();
 
     // Filtering
     const queryString = request.query;
@@ -178,4 +178,9 @@ exports.deleteProverb = async (request, response) => {
       message: "Not found"
     });
   }
+};
+
+exports.aliasTranslated = (request, response, next) => {
+  request.mongoQuery = Proverb.find({ translations: { $exists: true, $ne: [] } });
+  next();
 };
