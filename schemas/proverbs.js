@@ -47,6 +47,16 @@ const proverbSchema = new mongoose.Schema({
         type: Number,
         default: 2.5
     }
+}, {
+    toJSON: {virtuals: true},
+    toObject: {virtuals: true},
+});
+
+proverbSchema.virtual("english").get(function() {
+    let index = this.translations.findIndex(trans => trans.language_code === "EN");
+    console.log(index);
+    if(index !== -1) return this.translations[index].decsription;
+    return "";
 });
 
 const Proverb = mongoose.model('Proverb', proverbSchema);
