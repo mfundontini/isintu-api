@@ -89,6 +89,7 @@ exports.updateProverb = async (request, response) => {
 
   try {
       const proverb = await Proverb.findByIdAndUpdate(request.params.id, request.body, {new: true, runValidators: true});
+      if(!proverb) throw new Error("Not found");
       return response.status(201).json({
         status: "success",
         proverb
@@ -97,7 +98,7 @@ exports.updateProverb = async (request, response) => {
   catch(err) {
     return response.status(404).json({
       status: "Fail",
-      message: "Not found"
+      message: err.message
     });
   }
 };
@@ -142,6 +143,61 @@ exports.deleteProverb = async (request, response) => {
     });
   }
 };
+
+exports.proverbStatistics = async (request, response) => {
+
+  const statistics = await Proverb.aggregate([
+    {
+      $match: { translations: { $exists: true, $ne: [] } },
+    },
+    {
+      $group: {
+        _id: { $toUpper: "$type" },
+        averageRating: { $avg: "$rating" },
+        minminum: { $min: "$rating" },
+        maximum: { $max: "$rating" },
+        total: { $sum: 1 }
+      }
+    },
+    {
+      $sort: { averageRating: 1}
+    }
+  ]);
+
+  return response.status(200).json({
+    status: "Success",
+    statistics
+  });
+};
+
+exports.proverbsByTags = async (request, response) => {
+
+  const tags = await Proverb.aggregate([
+    {
+      $unwind: "$tags"
+    },
+    {
+      $match: { translations: { $exists: true, $ne: [] } },
+    },
+    {
+      $group: {
+        _id: { $toUpper: "$tags" },
+        total: { $sum: 1 },
+        proverbs: { $push: { $concat: ["$title", " - ", "$description"]} }
+      }
+    },
+    {
+      $sort: { rating: 1}
+    }
+  ]);
+
+  return response.status(200).json({
+    status: "Success",
+    tags
+  });
+};
+
+
 
 exports.aliasTranslated = (request, response, next) => {
   request.mongoQuery = new MongoQuery(Proverb.find({ translations: { $exists: true, $ne: [] } }), request.query);

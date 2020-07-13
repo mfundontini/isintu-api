@@ -1,16 +1,18 @@
 const express = require("express");
 
-const {listAllProverbs, createProverb, getProverb, 
-    updateProverb, deleteProverb, validateId, aliasTranslated
+const {listAllProverbs, createProverb, getProverb, proverbStatistics,
+    updateProverb, deleteProverb, validateId, aliasTranslated, proverbsByTags
 } = require("./../controllers/proverbsController");
 
 const proverbsRouter = express.Router();
 
-// Param middlewares
-proverbsRouter.param("id", validateId);
-
 // Aliased routes
 proverbsRouter.route("/translated").get(aliasTranslated, listAllProverbs);
+proverbsRouter.route("/statistics").get(proverbStatistics);
+proverbsRouter.route("/tags").get(proverbsByTags);
+
+// Param middlewares
+proverbsRouter.param("id", validateId);
 
 // REST Routes
 proverbsRouter.route("/").get(listAllProverbs).post(createProverb);
