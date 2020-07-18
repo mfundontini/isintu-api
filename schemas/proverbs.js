@@ -46,7 +46,15 @@ const proverbSchema = new mongoose.Schema({
     rating: {
         type: Number,
         default: 2.5
+    },
+    etymology: {
+        type: String,
+        default: ""
+    },
+    versions: {
+        type:[String]
     }
+
 }, {
     toJSON: {virtuals: true},
     toObject: {virtuals: true},
@@ -54,7 +62,8 @@ const proverbSchema = new mongoose.Schema({
 
 proverbSchema.virtual("english").get(function() {
     let index = this.translations.findIndex(trans => trans.language_code === "EN");
-    console.log(index);
+
+    // If an EN tranlation exists then show it as a virtual property
     if(index !== -1) return this.translations[index].decsription;
     return "";
 });
