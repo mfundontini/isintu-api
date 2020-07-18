@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const slugify = require("slugify");
 
 const proverbSchema = new mongoose.Schema({
     type: {
@@ -16,7 +17,9 @@ const proverbSchema = new mongoose.Schema({
         trim: true
     },
     slug: {
-        type: String
+        type: String,
+        unique: [true, "Slug must be unique"],
+        require: [true, "Slug is required."]
     },
     translations: {
         type: [Object]
@@ -70,6 +73,19 @@ proverbSchema.virtual("english").get(function() {
     if(index !== -1) return this.translations[index].decsription;
     return "";
 });
+
+proverbSchema.pre("save", function(next) {
+    this.slug = slugify(this.title, {lower: true, strict: true});
+    next();
+});
+
+/* POST SAVE HOOK LEFT ON SCHEMA FOR REFERENCE
+// POST SAVE HOOK DOES NOT NEED THE `this` KEYWORD, HENCE ARROW FUNCTION USED
+proverbSchema.post("save", (document, next) => {
+    console.log(document);
+    next();
+});
+*/
 
 const Proverb = mongoose.model('Proverb', proverbSchema);
 module.exports = Proverb;
