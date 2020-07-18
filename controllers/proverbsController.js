@@ -30,6 +30,7 @@ exports.findProverbOrExit = (request, response, next) => {
 };
 */
 
+/* ONE TIME FUNCTION -> slugify all documents using middleware, need middleware called in the router for this to work.
 exports.slugifyAll = async (request, response, next) => {
 
   let proverbs = await Proverb.find({});
@@ -42,6 +43,7 @@ exports.slugifyAll = async (request, response, next) => {
   }
   next();
 };
+*/
 
 // Route handlers
 exports.listAllProverbs = async (request, response) => {

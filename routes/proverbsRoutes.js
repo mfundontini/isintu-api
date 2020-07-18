@@ -1,6 +1,6 @@
 const express = require("express");
 
-const {listAllProverbs, createProverb, getProverb, proverbStatistics, slugifyAll,
+const {listAllProverbs, createProverb, getProverb, proverbStatistics,
     updateProverb, deleteProverb, validateId, aliasTranslated, proverbsByTags
 } = require("./../controllers/proverbsController");
 
@@ -15,7 +15,7 @@ proverbsRouter.route("/tags").get(proverbsByTags);
 proverbsRouter.param("id", validateId);
 
 // REST Routes
-proverbsRouter.route("/").get(slugifyAll, listAllProverbs).post(createProverb);
+proverbsRouter.route("/").get(listAllProverbs).post(createProverb);
 proverbsRouter.route("/:id").get(getProverb).patch(updateProverb).delete(deleteProverb);
 
 module.exports = proverbsRouter;
