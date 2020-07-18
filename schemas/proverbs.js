@@ -74,6 +74,7 @@ proverbSchema.virtual("english").get(function() {
     return "";
 });
 
+// Only works for proverb.save() and proverb.create()
 proverbSchema.pre("save", function(next) {
     this.slug = slugify(this.title, {lower: true, strict: true});
     next();
