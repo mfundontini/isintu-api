@@ -15,6 +15,9 @@ const proverbSchema = new mongoose.Schema({
         type: String,
         trim: true
     },
+    slug: {
+        type: String
+    },
     translations: {
         type: [Object]
     },
