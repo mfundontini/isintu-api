@@ -74,7 +74,8 @@ proverbSchema.virtual("english").get(function() {
     return "";
 });
 
-// Document middleware
+// DOCUMENT MIDDLEWARE
+
 // Only works for proverb.save() and proverb.create()
 proverbSchema.pre("save", function(next) {
     this.slug = slugify(this.title, {lower: true, strict: true});
@@ -91,7 +92,7 @@ proverbSchema.post("save", (document, next) => {
 
 // QUERY MIDDLEWARE
 
-/* AN EXAMPLE QUERY MIDDLEWARE HANDLER
+/* EXAMPLE QUERY MIDDLEWARE HANDLERS
 // Uses REGEX so that we match all find starting queries incl. findOneAndDelete etc
 proverbSchema.pre(/^find/, function(next) {
     this.find({translations: {$ne: false}});
