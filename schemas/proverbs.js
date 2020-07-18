@@ -74,6 +74,7 @@ proverbSchema.virtual("english").get(function() {
     return "";
 });
 
+// Document middleware
 // Only works for proverb.save() and proverb.create()
 proverbSchema.pre("save", function(next) {
     this.slug = slugify(this.title, {lower: true, strict: true});
@@ -84,6 +85,22 @@ proverbSchema.pre("save", function(next) {
 // POST SAVE HOOK DOES NOT NEED THE `this` KEYWORD, HENCE ARROW FUNCTION USED
 proverbSchema.post("save", (document, next) => {
     console.log(document);
+    next();
+});
+*/
+
+// QUERY MIDDLEWARE
+
+/* AN EXAMPLE QUERY MIDDLEWARE HANDLER
+// Uses REGEX so that we match all find starting queries incl. findOneAndDelete etc
+proverbSchema.pre(/^find/, function(next) {
+    this.find({translations: {$ne: false}});
+    next();
+});
+
+// POST QUERY MIDDLEWARE HAS THE ACTUAL QUERIED DOCUMENTS
+proverbSchema.post(/^find/, (documents, next) => {
+    console.log(documents);
     next();
 });
 */
