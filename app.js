@@ -43,4 +43,12 @@ server.use((request, response, next) => {
 server.use('/api/v1/proverbs', proverbsRouter);
 server.use('/api/v1/users', usersRouter);
 
+// Unmatched paths
+server.all("*", (request, response) => {
+  response.status(404).json({
+    status: "Not found",
+    error: "Resource does not exist on this server."
+  });
+});
+
 module.exports = server;
