@@ -107,29 +107,21 @@ exports.updateProverb = async (request, response, next) => {
   }
 };
 
-exports.createProverb = async (request, response, next) => {
+exports.createProverb = handleErrors(async (request, response, next) => {
   // Get body from response
   let body = request.body;
 
   // Create new object, do not mutate incomiming one
   const newProverb = Object.assign({created: body.updated}, body);
 
-  try {
-    // Await instance creation and respond
-    const proverb = await Proverb.create(newProverb);
-    console.log("Successfully persisted data.");
-    response.status(201).json({
-      status: "Created",
-      proverb: proverb
-    });
-  }
-  catch(err) {
-    return response.status(401).json({
-      status: "Fail",
-      error: err
-    });
-  }
-};
+  // Await instance creation and respond
+  const proverb = await Proverb.create(newProverb);
+  console.log("Successfully persisted data.");
+  response.status(201).json({
+    status: "Created",
+    proverb: proverb
+  });
+});
 
 exports.deleteProverb = async (request, response, next) => {
   
