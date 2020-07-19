@@ -7,7 +7,7 @@ class Query {
         this.query = query;
         this.queryString = queryString;
         this.page = this.queryString.page * 1 || 1;
-        this.limit = this.queryString.limit * 1 || 10;
+        this.limit = this.queryString.limit * 1 || 100;
     }
 
     filter() {

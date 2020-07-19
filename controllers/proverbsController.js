@@ -1,5 +1,6 @@
-const Proverb = require("./../schemas/proverbs");
+const slugify = require("slugify");
 
+const Proverb = require("./../schemas/proverbs");
 const MongoQuery = require("./../utils/query");
 
 // Middlewares
@@ -26,6 +27,21 @@ exports.findProverbOrExit = (request, response, next) => {
     });
     request.index = index;
     next();
+};
+*/
+
+/* ONE TIME FUNCTION -> slugify all documents using middleware, need middleware called in the router for this to work.
+exports.slugifyAll = async (request, response, next) => {
+
+  let proverbs = await Proverb.find({});
+  
+  for(let proverb of proverbs) {
+    console.log(`SLUGIFYING ${proverb.title}`);
+    let toUpdate = proverb._id;
+    await Proverb.findByIdAndUpdate(toUpdate, {slug: slugify(proverb.title, {lower: true, strict: true})}, {new: true, runValidators: true});
+    console.log(`SLUGIFIED ${proverb.title}`);
+  }
+  next();
 };
 */
 
