@@ -2,7 +2,8 @@ const slugify = require("slugify");
 
 const Proverb = require("./../schemas/proverbs");
 const MongoQuery = require("./../utils/query");
-const APIError = require("../utils/apiError");
+const APIError = require("./../utils/apiError");
+const handleErrors = require("./../utils/handleErrors.js");
 
 // Middlewares
 exports.validateId = (request, response, next, value) => {
@@ -46,12 +47,6 @@ exports.slugifyAll = async (request, response, next) => {
 };
 */
 
-// Use a decorator-like construct to catch async errors
-const handleErrors = (innerFunction) => {
-  return (request, response, next) => {
-    innerFunction(request, response, next).catch(next);
-  };
-};
 
 // Route handlers
 exports.listAllProverbs = handleErrors(async (request, response, next) => {
