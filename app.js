@@ -51,4 +51,13 @@ server.all("*", (request, response) => {
   });
 });
 
+server.use((error, request, response, next) => {
+  console.log(error.stack);
+
+  response.status(error.statusCode).json({
+    status: error.status,
+    message: error.message
+  });
+});
+
 module.exports = server;
