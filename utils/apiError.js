@@ -1,7 +1,7 @@
 class APIError extends Error {
-    constructor(message, statusCode) {
+    constructor(message, statusCode, statusMessage) {
         super(message);
-        this.status = `${status}`.startsWith("4") ? "Fail" : "Error";
+        this.statusMessage = statusMessage;
         this.statusCode = statusCode;
 
         Error.captureStackTrace(this, this.constructor);
