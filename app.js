@@ -52,9 +52,11 @@ server.all("*", (request, response, next) => {
 
 server.use((error, request, response, next) => {
   console.log(error.stack);
+  const status = error.status || 500;
+  const statusMessage = error.statusMessage || "Fail";
 
-  response.status(error.statusCode).json({
-    status: error.statusMessage,
+  response.status(status).json({
+    status: statusMessage,
     message: error.message
   });
 });
