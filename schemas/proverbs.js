@@ -1,16 +1,23 @@
 const mongoose = require("mongoose");
 const slugify = require("slugify");
 
+const LINK_PREFIXES = ["https://", "http://", "www."];
+
 const proverbSchema = new mongoose.Schema({
     type: {
         type: String,
-        required: [true, "The type should be either `izisho` or `izaga`."]
+        required: [true, "The type should be either `izisho` or `izaga`."],
+        enum: {
+            values: ["izaga", "izisho"],
+            message: "The type `{VALUE}` is not oneOf `izaga` or `izisho`"
+        }
     },
     title: {
         type: String,
         required: [true, "Title is required."],
         unique: true,
-        trim: true
+        trim: true,
+        maxlength: [255, "Title is too long."]
     },
     description: {
         type: String,
@@ -18,7 +25,7 @@ const proverbSchema = new mongoose.Schema({
     },
     slug: {
         type: String,
-        unique: [true, "Slug must be unique"],
+        unique: true,
         require: [true, "Slug is required."]
     },
     translations: {
@@ -44,14 +51,32 @@ const proverbSchema = new mongoose.Schema({
     },
     source: {
         type: Object,
-        required: [true, "Please specify the source information."]
+        required: [true, "Please specify the source information."],
+        validate: {
+            validator: function(value) {
+                console.log(value);
+                if(value.type === "link") {
+
+                    for(const prefix of LINK_PREFIXES) {
+                        console.log(`${value.value} startsWith ${prefix}`);
+                        if(value.value.startsWith(prefix)) return true;
+                    }
+                    return false;
+                }
+                return true;  
+            },
+            message: "Please use a valid link."
+        }
     },
     author: {
         type: Number
     },
     rating: {
         type: Number,
-        default: 2.5
+        default: 2.5,
+        min: [1, "Rating must be greater 1 or more."],
+        max: [5, "Rating must be 5 or less."],
+
     },
     etymology: {
         type: String,
