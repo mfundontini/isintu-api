@@ -63,7 +63,7 @@ exports.listAllProverbs = handleErrors(async (request, response, next) => {
   if(proverbs.length > 0) {
       return response.status(200).json({
       
-      status: "Success",
+      status: "Success.",
       page: query.page,
       limit: query.limit,
       results: proverbs.length,
@@ -75,22 +75,19 @@ exports.listAllProverbs = handleErrors(async (request, response, next) => {
 
 });
 
-exports.getProverb = async (request, response, next) => {
-  
-  try {
+exports.getProverb = handleErrors(async (request, response, next) => {
+
       const proverb = await Proverb.findById(request.params.id);
-      return response.status(200).json({
-        status: "success",
-        proverb
-      });
-  }
-  catch(err) {
-    return response.status(404).json({
-      status: "Fail",
-      message: "Not found"
-    });
-  }
-};
+
+      if(proverb) {
+        return response.status(200).json({
+          status: "success",
+          proverb
+        });
+      }
+
+      next(new APIError(`Proverb ${request.params.id} not found.`, 404, "Not found."));
+});
 
 exports.updateProverb = async (request, response, next) => {
 
