@@ -2,6 +2,7 @@ const slugify = require("slugify");
 
 const Proverb = require("./../schemas/proverbs");
 const MongoQuery = require("./../utils/query");
+const APIError = require("../utils/apiError");
 
 // Middlewares
 exports.validateId = (request, response, next, value) => {
@@ -45,46 +46,41 @@ exports.slugifyAll = async (request, response, next) => {
 };
 */
 
-// Route handlers
-exports.listAllProverbs = async (request, response) => {
-
-  try {
-    // Declare query with all results
-    let query = request.mongoQuery || new MongoQuery(Proverb.find(), request.query);
-
-    // Filter + Sort + Project + paginate query
-    query.filter().sort().project().paginate();
-
-    // Resolve query
-    const proverbs = await query.query;
-    // Use status codes to communicate actions than an umbrella error
-    if(proverbs.length > 0) {
-       return response.status(200).json({
-        
-        status: "Success",
-        page: query.page,
-        limit: query.limit,
-        results: proverbs.length,
-        proverbs
-      });
-    }
-    return response.status(204).json({
-      status: "No content",
-      results: 0,
-      page: query.page,
-      limit: query.limit,
-      data: [] 
-    });
-  }
-  catch(err) {
-    return response.status(500).json({
-      status: "Fail",
-      error: err.message 
-    });
-  }
+// Use a decorator-like construct to catch async errors
+const handleErrors = (innerFunction) => {
+  return (request, response, next) => {
+    innerFunction(request, response, next).catch(next);
+  };
 };
 
-exports.getProverb = async (request, response) => {
+// Route handlers
+exports.listAllProverbs = handleErrors(async (request, response, next) => {
+
+  // Declare query with all results
+  let query = request.mongoQuery || new MongoQuery(Proverb.find(), request.query);
+
+  // Filter + Sort + Project + paginate query
+  query.filter().sort().project().paginate();
+
+  // Resolve query
+  const proverbs = await query.query;
+  // Use status codes to communicate actions than an umbrella error
+  if(proverbs.length > 0) {
+      return response.status(200).json({
+      
+      status: "Success",
+      page: query.page,
+      limit: query.limit,
+      results: proverbs.length,
+      proverbs
+    });
+  }
+
+  next(new APIError("No proverbs available.", 204, "No content."));
+
+});
+
+exports.getProverb = async (request, response, next) => {
   
   try {
       const proverb = await Proverb.findById(request.params.id);
@@ -101,7 +97,7 @@ exports.getProverb = async (request, response) => {
   }
 };
 
-exports.updateProverb = async (request, response) => {
+exports.updateProverb = async (request, response, next) => {
 
   try {
       const proverb = await Proverb.findByIdAndUpdate(request.params.id, request.body, {new: true, runValidators: true});
@@ -119,7 +115,7 @@ exports.updateProverb = async (request, response) => {
   }
 };
 
-exports.createProverb = async (request, response) => {
+exports.createProverb = async (request, response, next) => {
   // Get body from response
   let body = request.body;
 
@@ -143,7 +139,7 @@ exports.createProverb = async (request, response) => {
   }
 };
 
-exports.deleteProverb = async (request, response) => {
+exports.deleteProverb = async (request, response, next) => {
   
   try {
       const proverb = await Proverb.findByIdAndDelete(request.params.id);
