@@ -77,35 +77,29 @@ exports.listAllProverbs = handleErrors(async (request, response, next) => {
 
 exports.getProverb = handleErrors(async (request, response, next) => {
 
-      const proverb = await Proverb.findById(request.params.id);
+  const proverb = await Proverb.findById(request.params.id);
 
-      if(proverb) {
-        return response.status(200).json({
-          status: "success",
-          proverb
-        });
-      }
-
-      next(new APIError(`Proverb ${request.params.id} not found.`, 404, "Not found."));
-});
-
-exports.updateProverb = async (request, response, next) => {
-
-  try {
-      const proverb = await Proverb.findByIdAndUpdate(request.params.id, request.body, {new: true, runValidators: true});
-      if(!proverb) throw new Error("Not found");
-      return response.status(201).json({
-        status: "success",
-        proverb
-      });
-  }
-  catch(err) {
-    return response.status(404).json({
-      status: "Fail",
-      message: err.message
+  if(proverb) {
+    return response.status(200).json({
+      status: "success",
+      proverb
     });
   }
-};
+
+  next(new APIError(`Proverb ${request.params.id} not found.`, 404, "Not found."));
+});
+
+exports.updateProverb = handleErrors(async (request, response, next) => {
+
+    const proverb = await Proverb.findByIdAndUpdate(request.params.id, request.body, {new: true, runValidators: true});
+
+    if(!proverb) return next(new APIError(`Proverb ${request.params.id} not found.`, 404, "Not found."));
+    
+    return response.status(201).json({
+      status: "success",
+      proverb
+    });
+});
 
 exports.createProverb = handleErrors(async (request, response, next) => {
   // Get body from response
