@@ -3,6 +3,8 @@ const dotenv = require("dotenv");
 const express = require("express");
 const morgan = require("morgan");
 
+const APIError = require("./utils/apiError");
+
 dotenv.config({ path: "./config.env"});
 
 // Local imports
@@ -42,5 +44,21 @@ server.use((request, response, next) => {
 // App routing
 server.use('/api/v1/proverbs', proverbsRouter);
 server.use('/api/v1/users', usersRouter);
+
+// Unmatched paths
+server.all("*", (request, response, next) => {
+  next(new APIError(`The resource ${request.path} is not found on this server`, 404, "Not found."));
+});
+
+server.use((error, request, response, next) => {
+  console.log(error.stack);
+  const status = error.statusCode || 500;
+  const statusMessage = error.statusMessage || "Fail.";
+
+  response.status(status).json({
+    status: statusMessage,
+    message: error.message
+  });
+});
 
 module.exports = server;
