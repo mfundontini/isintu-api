@@ -52,7 +52,7 @@ server.all("*", (request, response, next) => {
 
 server.use((error, request, response, next) => {
   console.log(error.stack);
-  const status = error.status || 500;
+  const status = error.statusCode || 500;
   const statusMessage = error.statusMessage || "Fail";
 
   response.status(status).json({
