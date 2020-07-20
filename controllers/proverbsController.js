@@ -79,14 +79,13 @@ exports.getProverb = handleErrors(async (request, response, next) => {
 
   const proverb = await Proverb.findById(request.params.id);
 
-  if(proverb) {
-    return response.status(200).json({
-      status: "success",
-      proverb
-    });
-  }
+  if(!proverb) return next(new APIError(`Proverb ${request.params.id} not found.`, 404, "Not found."));
 
-  next(new APIError(`Proverb ${request.params.id} not found.`, 404, "Not found."));
+  return response.status(200).json({
+    status: "Success.",
+    proverb
+  });
+
 });
 
 exports.updateProverb = handleErrors(async (request, response, next) => {
@@ -94,7 +93,7 @@ exports.updateProverb = handleErrors(async (request, response, next) => {
     const proverb = await Proverb.findByIdAndUpdate(request.params.id, request.body, {new: true, runValidators: true});
 
     if(!proverb) return next(new APIError(`Proverb ${request.params.id} not found.`, 404, "Not found."));
-    
+
     return response.status(201).json({
       status: "success",
       proverb
@@ -112,27 +111,19 @@ exports.createProverb = handleErrors(async (request, response, next) => {
   const proverb = await Proverb.create(newProverb);
   console.log("Successfully persisted data.");
   response.status(201).json({
-    status: "Created",
+    status: "Created.",
     proverb: proverb
   });
 });
 
-exports.deleteProverb = async (request, response, next) => {
+exports.deleteProverb = handleErrors(async (request, response, next) => {
+
+  const proverb = await Proverb.findByIdAndDelete(request.params.id);
+
+  if(!proverb) return next(new APIError(`Proverb ${request.params.id} not found.`, 404, "Not found."));
   
-  try {
-      const proverb = await Proverb.findByIdAndDelete(request.params.id);
-      return response.status(204).json({
-        status: "success",
-        proverb
-      });
-  }
-  catch(err) {
-    return response.status(404).json({
-      status: "Fail",
-      message: "Not found"
-    });
-  }
-};
+  return response.status(204).json({});
+});
 
 exports.proverbStatistics = async (request, response) => {
 
@@ -155,7 +146,7 @@ exports.proverbStatistics = async (request, response) => {
   ]);
 
   return response.status(200).json({
-    status: "Success",
+    status: "Success.",
     statistics
   });
 };
@@ -182,7 +173,7 @@ exports.proverbsByTags = async (request, response) => {
   ]);
 
   return response.status(200).json({
-    status: "Success",
+    status: "Success.",
     tags
   });
 };
